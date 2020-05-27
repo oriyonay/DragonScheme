@@ -10,7 +10,6 @@ a scheme interpreter, written by ori yonay
 
 TODO:
     - add 'let' feature
-    - add while loop
 
 """
 
@@ -155,7 +154,6 @@ class Functions:
         return BOOLS[True]
 
     def f_define(args):
-        print('f_define called on args: %s' % args)
         # split args into 2 arguments:
         if args.startswith('('):
             # then this is a function definition:
