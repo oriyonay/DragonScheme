@@ -3,11 +3,13 @@
   / _ \_______ ____ ____  ___  / __/___/ /  ___ __ _  ___
  / // / __/ _ `/ _ `/ _ \/ _ \_\ \/ __/ _ \/ -_)  ' \/ -_)
 /____/_/  \_,_/\_, /\___/_//_/___/\__/_//_/\__/_/_/_/\__/
-              /___/                                       
+              /___/
 
 # a simple scheme interpreter, written by ori yonay
 
 """
+
+import copy # for deep copying of lists
 
 # for user-defined symbols
 SYMBOLS = {'newline' : '\n'}
@@ -452,7 +454,7 @@ class Functions:
             return Error('(map) error: symbol %s is not a list.' % args[1])
 
         # make a copy of the list:
-        elements_copy = SYMBOLS[args[1]]
+        elements_copy = copy.deepcopy(SYMBOLS[args[1]])
 
         # apply the function to each:
         for i in range(len(elements_copy)):
