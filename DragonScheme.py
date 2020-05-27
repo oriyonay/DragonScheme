@@ -5,7 +5,12 @@
 /____/_/  \_,_/\_, /\___/_//_/___/\__/_//_/\__/_/_/_/\__/
               /___/
 
-# a simple scheme interpreter, written by ori yonay
+version 0.2
+a scheme interpreter, written by ori yonay
+
+TODO:
+    - add 'let' feature
+    - add while loop
 
 """
 
@@ -638,6 +643,9 @@ def runCmd(cmd):
 # apply: a separate function to apply the function to the arguments
 #        so it can be used by map() and filter() without rewriting this code
 def apply(cmd):
+    # in case a function called another function & returned None:
+    if cmd[0] == 'None': return None
+
     if cmd[0] == '+':
         return Functions.f_add(cmd[1:])
     if cmd[0] == '-':
@@ -774,6 +782,9 @@ if __name__ == '__main__':
         # if user typed 'exit', break out of the loop:
         if cmd == 'exit': break
 
+        # variable to keep track of whether user typed 'scratch' in the loop:
+        isScratch = False
+
         # if cmd has unbalanced parentheses, wait until they're balanced:
         while Utils.unbalanced(cmd):
             # print extra prompt:
@@ -785,7 +796,15 @@ if __name__ == '__main__':
             if extraInput.find(';') > 0:
                 extraInput = extraInput[:extraInput.find(';')]
 
+            # did the user type 'scratch'?
+            if extraInput == ' scratch ':
+                isScratch = True
+                break
+
             cmd += extraInput
+
+        # if the user entered 'scratch', then we reset the entire command & start over:
+        if isScratch: continue
 
         # evaluate cmd:
         try:
