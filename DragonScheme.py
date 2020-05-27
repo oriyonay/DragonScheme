@@ -613,9 +613,11 @@ def runCmd(cmd):
     # if length of command = 1 then we just have to print symbol requested
     if len(cmd) == 1:
         if cmd[0] in SYMBOLS:
-            # if this is a function, run it with no arguments:
+            # if this is a function name:
             if isinstance(SYMBOLS[cmd[0]], Function):
-                SYMBOLS[cmd[0]].run([])
+                # if this function takes no arguments, run it:
+                if len(SYMBOLS[cmd[0]].args) == 0:
+                    return SYMBOLS[cmd[0]].run([])
             # if it's a list, print it:
             if isinstance(SYMBOLS[cmd[0]], list):
                 # we print lists using a custom function to avoid
