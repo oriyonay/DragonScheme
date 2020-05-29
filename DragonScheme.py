@@ -5,7 +5,7 @@
 /____/_/  \_,_/\_, /\___/_//_/___/\__/_//_/\__/_/_/_/\__/
               /___/
 
-version 0.2
+version 0.2.2
 a scheme interpreter, written by ori yonay
 
 TODO:
@@ -27,7 +27,7 @@ INBUILTFUNCTIONS = ['+', '-', '*', '/', '%', 'modulus', '=', 'eq?',
                     '>=', 'geq?', '<=', 'leq?', 'list', 'car', 'cdr',
                     'cadr', 'caddr', 'cadddr', 'caddddr', 'reverse',
                     'append', 'cons', 'length', 'at', 'even?', 'odd?',
-                    'positive?', 'list?', 'display', 'map', 'filter'
+                    'positive?', 'list?', 'display', 'map', 'filter', 'del'
 ]
 
 # Error: a class for returning error messages
@@ -306,6 +306,7 @@ class Functions:
         return Functions.make_list(SYMBOLS[arg[0]][::-1])
 
     def f_append(args):
+        print(args)
         newlist = []
         for arg in args:
             newlist.extend(SYMBOLS[arg] if arg in SYMBOLS else arg)
@@ -492,6 +493,16 @@ class Functions:
                 elements.append(element)
 
         return Functions.make_list(elements)
+
+    def f_delete(args):
+        # delete symbols from our symbol table
+        for arg in args:
+            if arg not in SYMBOLS:
+                return Error('Error: %s not found in symbol table.' % arg)
+
+        # now that we're sure that all our args are in the symbol table, delete them:
+        for arg in args:
+            del SYMBOLS[arg]
 
 # Function: a type for USER-DEFINED FUNCTIONS
 class Function:
@@ -705,6 +716,8 @@ def apply(cmd):
         return Functions.map(cmd[1:])
     if cmd[0] == 'filter':
         return Functions.filter(cmd[1:])
+    if cmd[0] == 'del':
+        return Functions.f_delete(cmd[1:])
     if cmd[0] in SYMBOLS:
         # make sure this is actually a function call:
         if not isinstance(SYMBOLS[cmd[0]], Function):
