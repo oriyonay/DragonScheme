@@ -5,7 +5,7 @@
 /____/_/  \_,_/\_, /\___/_//_/___/\__/_//_/\__/_/_/_/\__/
               /___/
 
-version 0.2.2
+version 0.2.3
 a scheme interpreter, written by ori yonay
 
 TODO:
@@ -27,7 +27,8 @@ INBUILTFUNCTIONS = ['+', '-', '*', '/', '%', 'modulus', '=', 'eq?',
                     '>=', 'geq?', '<=', 'leq?', 'list', 'car', 'cdr',
                     'cadr', 'caddr', 'cadddr', 'caddddr', 'reverse',
                     'append', 'cons', 'length', 'at', 'even?', 'odd?',
-                    'positive?', 'list?', 'display', 'map', 'filter', 'del'
+                    'positive?', 'list?', 'display', 'map', 'filter',
+                    'del', 'read', 'read-line'
 ]
 
 # Error: a class for returning error messages
@@ -504,6 +505,9 @@ class Functions:
         for arg in args:
             del SYMBOLS[arg]
 
+    def f_read():
+        return input()
+
 # Function: a type for USER-DEFINED FUNCTIONS
 class Function:
     def __init__(self, args, cmd):
@@ -627,6 +631,7 @@ def runCmd(cmd):
 
     # if length of command = 1 then we just have to print symbol requested
     if len(cmd) == 1:
+        # if the no-argument command is in our symbol table:
         if cmd[0] in SYMBOLS:
             # if this is a function name:
             if isinstance(SYMBOLS[cmd[0]], Function):
@@ -642,6 +647,8 @@ def runCmd(cmd):
             else: print(SYMBOLS[cmd[0]])
         elif cmd[0] == '$SYMBOLS': # only valid non-symbol command
             return Functions.printsymbols()
+        elif cmd[0] == 'read' or cmd[0] == 'read-line':
+            return Functions.f_read()
         else:
             return Error('Error: symbol %s not found.' %cmd[0])
 
@@ -718,6 +725,10 @@ def apply(cmd):
         return Functions.filter(cmd[1:])
     if cmd[0] == 'del':
         return Functions.f_delete(cmd[1:])
+    if cmd[0] == 'read' or cmd[0] == 'read-line':
+        # no other arguments should be given here
+        print('(read) Error: no arguments expected, received %s.' % len(cmd[1:]))
+        return None
     if cmd[0] in SYMBOLS:
         # make sure this is actually a function call:
         if not isinstance(SYMBOLS[cmd[0]], Function):
