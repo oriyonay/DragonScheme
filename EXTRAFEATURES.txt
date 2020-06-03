@@ -1,0 +1,8 @@
+List of extra features in DragonScheme:
+
+- ($SYMBOLS) command shows all symbols currently in the symbol table
+- 'del' command to delete a variable from the symbol table
+- Support for modulus (or %) operation (not in all flavors of Scheme)
+- 'reverse' command to reverse a list (not in all flavors of Scheme)
+- 'at' command to return item at a certain list index (so (at mylist 4) returns mylist[4])
+- if user messed up on a multi-line instruction, they can simply type 'scratch' to undo everything
